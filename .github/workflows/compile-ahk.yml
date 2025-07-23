@@ -26,12 +26,14 @@ jobs:
 
           New-Item -ItemType Directory -Path .\dist -Force | Out-Null
           $outputDir = Resolve-Path -Path ".\dist"
+          $base = Resolve-Path ".\compiler\AutoHotkeySC.bin"
 
           Get-ChildItem -Path . -Filter *.ahk | ForEach-Object {
             $input = $_.FullName
             $output = Join-Path -Path $outputDir -ChildPath "$($_.BaseName).exe"
             Write-Host "Compiling $input -> $output"
-            & "$compiler" /in "$input" /out "$output"
+            & "$compiler" /in "$input" /out "$output" /base "$base"
+            Write-Host "Compiler exit code: $LASTEXITCODE"
           }
 
           Write-Host "Compiled files:"
