@@ -25,16 +25,17 @@ jobs:
           }
 
           New-Item -ItemType Directory -Path .\dist -Force | Out-Null
+          $outputDir = Resolve-Path -Path ".\dist"
 
           Get-ChildItem -Path . -Filter *.ahk | ForEach-Object {
             $input = $_.FullName
-            $output = Join-Path -Path ".\dist" -ChildPath "$($_.BaseName).exe"
+            $output = Join-Path -Path $outputDir -ChildPath "$($_.BaseName).exe"
             Write-Host "Compiling $input -> $output"
             & "$compiler" /in "$input" /out "$output"
           }
 
           Write-Host "Compiled files:"
-          Get-ChildItem -Path .\dist
+          Get-ChildItem -Path $outputDir
       
       - name: Create github release
         # You may pin to the exact commit or the version.
