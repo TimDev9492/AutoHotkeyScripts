@@ -11,15 +11,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install AutoHotkey
-        run: |
-          Invoke-WebRequest -Uri https://www.autohotkey.com/download/ahk-install.exe -OutFile ahk-install.exe
-          Start-Process -Wait -FilePath .\ahk-install.exe -ArgumentList "/S"
-
       - name: Compile all .ahk scripts in the root
         shell: pwsh
         run: |
-          $compiler = "C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe"
+          $compiler = ".\compiler\Ahk2Exe.exe"
           if (!(Test-Path $compiler)) {
             Write-Error "Ahk2Exe.exe not found at $compiler"
             exit 1
