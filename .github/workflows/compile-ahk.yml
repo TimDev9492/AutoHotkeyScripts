@@ -35,6 +35,14 @@ jobs:
               Write-Host "Compiling $input -> $output"
               & "$compiler" /in "$input" /out "$output" /base "$base"
 
+              # Wait for the output to appear
+              $maxWait = 30
+              $attempt = 0
+              while (-not (Test-Path $output) -and $attempt -lt $maxWait) {
+                  Start-Sleep -Milliseconds 100
+                  $attempt++
+              }
+
               if (!(Test-Path $output)) {
                   Write-Error "ERROR: Compilation failed — output not created: $output"
                   exit 1
