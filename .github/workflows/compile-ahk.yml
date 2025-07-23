@@ -25,19 +25,25 @@ jobs:
           }
 
           New-Item -ItemType Directory -Path .\dist -Force | Out-Null
+
           $outputDir = Resolve-Path -Path ".\dist"
-          $base = Resolve-Path ".\compiler\AutoHotkeySC.bin"
 
           Get-ChildItem -Path . -Filter *.ahk | ForEach-Object {
-            $input = $_.FullName
-            $output = Join-Path -Path $outputDir -ChildPath "$($_.BaseName).exe"
-            Write-Host "Compiling $input -> $output"
-            & "$compiler" /in "$input" /out "$output" /base "$base"
-            Write-Host "Compiler exit code: $LASTEXITCODE"
+              $input = $_.FullName
+              $output = Join-Path -Path $outputDir -ChildPath "$($_.BaseName).exe"
+              Write-Host "Compiling $input -> $output"
+              & "$compiler" /in "$input" /out "$output" /base "$base"
+
+              if (!(Test-Path $output)) {
+                  Write-Error "ERROR: Compilation failed — output not created: $output"
+                  exit 1
+              } else {
+                  Write-Host "✅ Compiled successfully: $output"
+              }
           }
 
           Write-Host "Compiled files:"
-          Get-ChildItem -Path $outputDir
+          Get-ChildItem -Path $outputDir.Path
       
       - name: Create github release
         # You may pin to the exact commit or the version.
