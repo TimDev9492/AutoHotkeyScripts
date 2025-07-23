@@ -17,6 +17,7 @@ jobs:
         shell: pwsh
         run: |
           $compiler = ".\compiler\Ahk2Exe.exe"
+          $base = Resolve-Path ".\compiler\AutoHotkeySC.bin"
           if (!(Test-Path $compiler)) {
             Write-Error "Ahk2Exe.exe not found at $compiler"
             exit 1
@@ -25,7 +26,7 @@ jobs:
           }
 
           New-Item -ItemType Directory -Path .\dist -Force | Out-Null
-
+          
           $outputDir = Resolve-Path -Path ".\dist"
 
           Get-ChildItem -Path . -Filter *.ahk | ForEach-Object {
