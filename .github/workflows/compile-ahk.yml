@@ -36,5 +36,5 @@ jobs:
         uses: softprops/action-gh-release@v2.0.5
         with:
           tag_name: v1.0.0
-          files: dist/*
+          files: dist/germanLetters.exe
           name: AutoHotkey Scripts
