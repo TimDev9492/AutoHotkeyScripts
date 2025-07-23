@@ -20,6 +20,8 @@ jobs:
           if (!(Test-Path $compiler)) {
             Write-Error "Ahk2Exe.exe not found at $compiler"
             exit 1
+          } else {
+            Write-Host "Found Ahk2Exe.exe at $compiler"
           }
 
           New-Item -ItemType Directory -Path .\dist -Force | Out-Null
@@ -27,10 +29,11 @@ jobs:
           Get-ChildItem -Path . -Filter *.ahk | ForEach-Object {
             $input = $_.FullName
             $output = Join-Path -Path ".\dist" -ChildPath "$($_.BaseName).exe"
+            Write-Host "Compiling $input -> $output"
             & "$compiler" /in "$input" /out "$output"
           }
 
-          # Debug: list contents of dist folder
+          Write-Host "Compiled files:"
           Get-ChildItem -Path .\dist
       
       - name: Create github release
