@@ -26,9 +26,12 @@ jobs:
 
           Get-ChildItem -Path . -Filter *.ahk | ForEach-Object {
             $input = $_.FullName
-            $output = "$($_.BaseName).exe"
-            & "$compiler" /in "$input" /out ".\dist\$output"
+            $output = Join-Path -Path ".\dist" -ChildPath "$($_.BaseName).exe"
+            & "$compiler" /in "$input" /out "$output"
           }
+
+          # Debug: list contents of dist folder
+          Get-ChildItem -Path .\dist
       
       - name: Create github release
         # You may pin to the exact commit or the version.
@@ -36,5 +39,6 @@ jobs:
         uses: softprops/action-gh-release@v2.0.5
         with:
           tag_name: v1.0.0
-          files: dist/germanLetters.exe
+          files: |
+            dist/*.exe
           name: AutoHotkey Scripts
