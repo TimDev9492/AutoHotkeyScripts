@@ -59,7 +59,8 @@ jobs:
         # uses: softprops/action-gh-release@69320dbe05506a9a39fc8ae11030b214ec2d1f87
         uses: softprops/action-gh-release@v2.0.5
         with:
-          tag_name: v1.0.0
+          tag_name: v1.0.0-${{ github.run_number }}
           files: |
             dist/*.exe
-          name: AutoHotkey Scripts
+          name: "AutoHotkey Scripts Build ${{ github.run_number }}"
+          body: "This release contains compiled scripts built automatically from the workflow."
